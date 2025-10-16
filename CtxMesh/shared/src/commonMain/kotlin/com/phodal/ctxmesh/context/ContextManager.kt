@@ -1,10 +1,8 @@
 package com.phodal.ctxmesh.context
 
 import com.phodal.ctxmesh.context.retrieval.ContextRetriever
-import com.phodal.ctxmesh.context.retrieval.QueryRewriter
-import com.phodal.ctxmesh.context.retrieval.SimpleQueryRewriter
-
-import kotlinx.datetime.Clock
+import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
+import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
 
 /**
  * 上下文管理器
@@ -15,7 +13,6 @@ class ContextManager(
     private val retriever: ContextRetriever? = null,
     private val queryRewriter: QueryRewriter = SimpleQueryRewriter()
 ) {
-    
     /**
      * 基于查询构建上下文窗口
      * 这是上下文工程的核心方法
@@ -28,7 +25,7 @@ class ContextManager(
     ): String {
         // 清空现有上下文
         contextWindow.clear()
-        
+
         // 1. 添加系统提示词（最高优先级）
         systemPrompt?.let {
             contextWindow.addContext(
@@ -40,7 +37,7 @@ class ContextManager(
                 )
             )
         }
-        
+
         // 2. 添加输出格式说明
         outputFormat?.let {
             contextWindow.addContext(
@@ -52,7 +49,7 @@ class ContextManager(
                 )
             )
         }
-        
+
         // 3. 添加用户查询
         contextWindow.addContext(
             ContextContent(
@@ -62,17 +59,17 @@ class ContextManager(
                 priority = ContextPriority.HIGH
             )
         )
-        
+
         // 4. 检索相关知识并添加到上下文（简化版本，暂时跳过检索）
         // TODO: 实现异步检索功能
         retriever?.let { ret ->
             // 暂时跳过检索功能，避免协程复杂性
             // 可以在后续版本中添加异步支持
         }
-        
+
         return contextWindow.assembleContext()
     }
-    
+
     /**
      * 添加长期记忆内容
      */
@@ -87,7 +84,7 @@ class ContextManager(
             )
         )
     }
-    
+
     /**
      * 添加短期记忆内容（会话上下文）
      */
@@ -102,7 +99,7 @@ class ContextManager(
             )
         )
     }
-    
+
     /**
      * 添加工具上下文
      */
@@ -117,7 +114,7 @@ class ContextManager(
             )
         )
     }
-    
+
     /**
      * 更新全局状态
      */
@@ -126,7 +123,7 @@ class ContextManager(
         contextWindow.getAllContexts()
             .filter { it.type == ContextType.GLOBAL_STATE }
             .forEach { contextWindow.removeContext(it.id) }
-        
+
         // 添加新的全局状态
         contextWindow.addContext(
             ContextContent(
@@ -138,7 +135,7 @@ class ContextManager(
             )
         )
     }
-    
+
     /**
      * 获取当前上下文窗口状态
      */
@@ -151,7 +148,7 @@ class ContextManager(
             contextsByType = contextWindow.getAllContexts().groupBy { it.type }
         )
     }
-    
+
     /**
      * 清理过期的短期记忆
      * @param maxAge 最大保留时间（毫秒）
@@ -159,15 +156,15 @@ class ContextManager(
     fun cleanupShortTermMemory(maxAge: Long = 3600000) { // 默认1小时
         val currentTime = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
         val toRemove = contextWindow.getAllContexts()
-            .filter { 
-                it.type == ContextType.SHORT_TERM_MEMORY && 
-                (currentTime - it.timestamp) > maxAge 
+            .filter {
+                it.type == ContextType.SHORT_TERM_MEMORY &&
+                        (currentTime - it.timestamp) > maxAge
             }
             .map { it.id }
-        
+
         toRemove.forEach { contextWindow.removeContext(it) }
     }
-    
+
     /**
      * 索引新内容到检索器
      */
@@ -183,20 +180,6 @@ class ContextManager(
         // TODO: 实现异步移除功能
         return false
     }
-}
-
-/**
- * 上下文窗口状态信息
- */
-data class ContextWindowStatus(
-    val totalTokenBudget: Int,
-    val usedTokens: Int,
-    val remainingTokens: Int,
-    val contextCount: Int,
-    val contextsByType: Map<ContextType, List<ContextContent>>
-) {
-    val utilizationRate: Double get() = usedTokens.toDouble() / totalTokenBudget
-    val isNearCapacity: Boolean get() = utilizationRate > 0.8
 }
 
 /**

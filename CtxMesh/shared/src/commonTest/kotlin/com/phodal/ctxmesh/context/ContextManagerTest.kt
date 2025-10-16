@@ -1,6 +1,5 @@
 package com.phodal.ctxmesh.context
 
-import com.phodal.ctxmesh.context.retrieval.KeywordRetriever
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertEquals
