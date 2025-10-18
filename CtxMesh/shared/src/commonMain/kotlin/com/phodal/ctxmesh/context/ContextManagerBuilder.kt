@@ -5,7 +5,7 @@ import com.phodal.ctxmesh.context.retrieval.HybridRetriever
 import com.phodal.ctxmesh.context.retrieval.KeywordRetriever
 import com.phodal.ctxmesh.context.retrieval.RetrievalStrategy
 import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
-import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
+import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleCodeQueryRewriter
 
 /**
  * 高级上下文管理器构建器
@@ -63,9 +63,9 @@ class ContextManagerBuilder {
         }
 
         val queryRewriter = if (config.enableQueryRewriting) {
-            customQueryRewriter ?: SimpleQueryRewriter()
+            customQueryRewriter ?: SimpleCodeQueryRewriter()
         } else {
-            SimpleQueryRewriter()
+            SimpleCodeQueryRewriter()
         }
 
         return ContextManager(contextWindow, retriever, queryRewriter)

@@ -2,7 +2,7 @@ package com.phodal.ctxmesh.context
 
 import com.phodal.ctxmesh.context.retrieval.ContextRetriever
 import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
-import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
+import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleCodeQueryRewriter
 
 /**
  * 上下文管理器
@@ -11,7 +11,7 @@ import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
 class ContextManager(
     private val contextWindow: ContextWindow = DefaultContextWindow(),
     private val retriever: ContextRetriever? = null,
-    private val queryRewriter: QueryRewriter = SimpleQueryRewriter()
+    private val queryRewriter: QueryRewriter = SimpleCodeQueryRewriter()
 ) {
     /**
      * 基于查询构建上下文窗口

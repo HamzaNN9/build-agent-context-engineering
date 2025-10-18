@@ -8,7 +8,7 @@ import com.phodal.ctxmesh.context.ContextWindowStatus
 import com.phodal.ctxmesh.context.DefaultContextWindow
 import com.phodal.ctxmesh.context.retrieval.ContextRetriever
 import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
-import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
+import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleCodeQueryRewriter
 import com.phodal.ctxmesh.memory.CleanupCriteria
 import com.phodal.ctxmesh.memory.MemoryCleanupResult
 import com.phodal.ctxmesh.memory.MemoryItem
@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 class ContextManagerWithMemory(
     private val contextWindow: ContextWindow = DefaultContextWindow(),
     private val retriever: ContextRetriever? = null,
-    private val queryRewriter: QueryRewriter = SimpleQueryRewriter(),
+    private val queryRewriter: QueryRewriter = SimpleCodeQueryRewriter(),
     private val memoryManager: MemoryManager
 ) {
     
