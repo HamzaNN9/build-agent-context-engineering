@@ -1,9 +1,19 @@
-package com.phodal.ctxmesh.context
+package com.phodal.ctxmesh
 
+import com.phodal.ctxmesh.context.ContextContent
+import com.phodal.ctxmesh.context.ContextPriority
+import com.phodal.ctxmesh.context.ContextType
+import com.phodal.ctxmesh.context.ContextWindow
+import com.phodal.ctxmesh.context.ContextWindowStatus
+import com.phodal.ctxmesh.context.DefaultContextWindow
 import com.phodal.ctxmesh.context.retrieval.ContextRetriever
 import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
 import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleQueryRewriter
+import com.phodal.ctxmesh.memory.CleanupCriteria
+import com.phodal.ctxmesh.memory.MemoryCleanupResult
+import com.phodal.ctxmesh.memory.MemoryItem
 import com.phodal.ctxmesh.memory.MemoryManager
+import com.phodal.ctxmesh.memory.MemoryManagerStats
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -102,7 +112,7 @@ class ContextManagerWithMemory(
     /**
      * 从记忆系统检索内容
      */
-    suspend fun retrieveFromMemory(query: String, maxResults: Int = 5): List<com.phodal.ctxmesh.memory.MemoryItem> {
+    suspend fun retrieveFromMemory(query: String, maxResults: Int = 5): List<MemoryItem> {
         return memoryManager.retrieve(query, maxResults)
     }
 
@@ -130,14 +140,14 @@ class ContextManagerWithMemory(
     /**
      * 清理过期记忆
      */
-    suspend fun cleanupMemories(): com.phodal.ctxmesh.memory.MemoryCleanupResult {
+    suspend fun cleanupMemories(): MemoryCleanupResult {
         return memoryManager.cleanup()
     }
 
     /**
      * 获取记忆统计信息
      */
-    suspend fun getMemoryStats(): com.phodal.ctxmesh.memory.MemoryManagerStats {
+    suspend fun getMemoryStats(): MemoryManagerStats {
         return memoryManager.getStats()
     }
 
@@ -158,7 +168,7 @@ class ContextManagerWithMemory(
      * 清理过期的短期记忆
      */
     fun cleanupShortTermMemory(maxAge: Long = 3600000) = runBlocking {
-        val criteria = com.phodal.ctxmesh.memory.CleanupCriteria(maxAge = maxAge)
+        val criteria = CleanupCriteria(maxAge = maxAge)
         memoryManager.cleanup()
     }
 
