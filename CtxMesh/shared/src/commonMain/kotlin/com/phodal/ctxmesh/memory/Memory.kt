@@ -1,6 +1,8 @@
 package com.phodal.ctxmesh.memory
 
 import com.phodal.ctxmesh.context.ContextContent
+import com.phodal.ctxmesh.context.ContextPriority
+import com.phodal.ctxmesh.context.ContextType
 import kotlinx.datetime.Instant
 
 /**
@@ -82,7 +84,7 @@ data class MemoryItem(
     /**
      * 转换为 ContextContent
      */
-    fun toContextContent(type: com.phodal.ctxmesh.context.ContextType, priority: com.phodal.ctxmesh.context.ContextPriority): ContextContent {
+    fun toContextContent(type: ContextType, priority: ContextPriority): ContextContent {
         return ContextContent(
             id = id,
             type = type,
