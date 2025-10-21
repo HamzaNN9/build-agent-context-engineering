@@ -7,9 +7,6 @@ import com.phodal.ctxmesh.context.retrieval.RetrievalStrategy
 import com.phodal.ctxmesh.context.retrieval.rewrite.QueryRewriter
 import com.phodal.ctxmesh.context.retrieval.rewrite.SimpleCodeQueryRewriter
 
-/**
- * 高级上下文管理器构建器
- */
 class ContextManagerBuilder {
     private var config = ContextConfig()
     private var customRetrievers = mutableListOf<ContextRetriever>()
@@ -52,11 +49,13 @@ class ContextManagerBuilder {
                         HybridRetriever(customRetrievers)
                     }
                 }
+
                 config.retrievalStrategy == RetrievalStrategy.KEYWORD -> KeywordRetriever()
                 config.retrievalStrategy == RetrievalStrategy.HYBRID -> {
                     HybridRetriever(listOf(KeywordRetriever()))
                 }
-                else -> KeywordRetriever() // 默认使用关键词检索
+
+                else -> KeywordRetriever()
             }
         } else {
             null

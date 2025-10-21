@@ -3,10 +3,6 @@ package com.phodal.ctxmesh.context.retrieval
 import com.phodal.ctxmesh.context.ContextContent
 import com.phodal.ctxmesh.context.ContextPriority
 
-/**
- * 混合检索器
- * 结合多种检索策略的实现
- */
 class HybridRetriever(
     private val retrievers: List<ContextRetriever>,
     private val weights: List<Double> = List(retrievers.size) { 1.0 / retrievers.size }
